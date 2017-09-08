@@ -86,6 +86,7 @@ $(document).ready(function(){
 
 		var clock = {
 		time : 5,
+		intervalId : "",
 
 		setTime : function(){
 			if(!clockRunning)
@@ -119,6 +120,7 @@ $(document).ready(function(){
 			clockRunning = false;
 		}
 	}
+				
 					$(".answer").remove();
 					$(".question").remove();
 					$(".timer").remove();
@@ -172,27 +174,41 @@ $(document).ready(function(){
 							}
 						}); 
 
-					 function answerScreen(){
+					 function answerScreen(){	
+					 	console.log("ppppp");
+					 answerDiv.html(questionArray[count].key);
+					 	gameDiv.append(answerDiv);	
+					 var secondTimerVal = setTimeout(newQuestion, 1000);			 		
+					 count++;
+
+
 
 					 	clock.stop();
-					 	var secondTimerVal = setTimeout(newQuestion, 3000);					 	
+
+					 	if(count == 6)
+						{
+							clearTimeout(secondTimerVal);
+							console.log(count);
+							setTimeout(gameOverScreen, 1000);
+							clock.stop();
+						
+						
+						}
+						else{
+							
 					 	$(".answer").remove();
 					 	$(".question").remove();
-					 	$(".timer").remove();				 	
-					 	answerDiv.html(questionArray[count].key);
-					 	gameDiv.append(answerDiv);
-					 	count++;
-					 	gameCheck();
+					 	$(".timer").remove();
+					 	 	
+					 	
+					 	// gameCheck();
+
+					 	}
 
 					 }
 
 					 function gameCheck(){
-					  if(count == 5)
-						{
-							count = 0;
-						gameOverScreen();
-						
-						}
+
 					}
 
 					 function gameOverScreen(){
@@ -200,12 +216,15 @@ $(document).ready(function(){
 					 	$(".answer").remove();
 					 	$(".question").remove();
 					 	$(".timer").remove();
-					 	clock.stop();
+
+					 	
 
 					 	answerDiv.html("Wins: " + wins + "<br>Losses: " + losses + "<br>Unanswered: " + unanswered);
-					 	var restartButton = $("<button>", {id: "restartButton"});
-					 	$("#restartButton").html("Restart");
-					 	answerDiv.append(restartButton);
+					 	var restartDiv = $("<div>", {id: "restartDiv"});
+					 	$("#restartDiv").html("<button id='restartButton'>Restart</button>");
+					 	answerDiv.append(restartDiv);
+
+					 	console.log("gameOver");
 
 
 
