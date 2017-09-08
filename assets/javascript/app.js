@@ -4,10 +4,10 @@ $(document).ready(function(){
 
 	var question1 = {
 		q : "When did the titanic sink?",
-		a1 : "a",
-		a2 : "d",
+		a1 : "1900",
+		a2 : "1890",
 		a3 : "1912",
-		a4 : "b",
+		a4 : "1919",
 		correct : "answer3",
 		key : "1912"
 	}
@@ -15,9 +15,9 @@ $(document).ready(function(){
 	var question2 = {
 		q : "Who discovered America?",
 		a1 : "Christopher Columbus",
-		a2 : "x",
-		a3 : "q",
-		a4 : "z",
+		a2 : "Paul Revere",
+		a3 : "George Washington",
+		a4 : "Nicolaus Copernicus",
 		correct : "answer1",
 		key : "Christopher Columbus"
 	}
@@ -65,12 +65,8 @@ $(document).ready(function(){
 	var clockRunning = false;
 
 	var questionArray = [question1, question2, question3, question4, question5, question6];
-
-	
 	
 	var count = 0;
-	
-	
 
 		var gameDiv = $("#gamePlay");
 		var answerDiv = $("<div>", {id: "displayAnswer", class:"answerDisplay"});
@@ -78,66 +74,51 @@ $(document).ready(function(){
 		gameDiv.append(startButton);
 		startButton.prop("value", "Start Game");
 		startButton.html("Start Game");
-
-		 var timer = $("<div>", {id:"clock", class: "timer"});
-		timer.html(clock.time);
-		gameDiv.append(timer);
-
 		$(gamePlay).append(startButton);
 
 		var wins = 0;
 		var losses = 0;
 		var unanswered = 0;
 
-		
-
-	
-
-
 	$("#startButton").on("click", function newQuestion(){
+
+		
 
 		var clock = {
 		time : 5,
 
-		start : function(){
-
-			if (!clockRunning) {
-
-            intervalId = setInterval(clock.count , 1000);
-            clockRunning = true;
-      }
-
+		setTime : function(){
+			if(!clockRunning)
+			{
+			timer.html(clock.time);
+			}
 		},
 
-		count : function() {
+		start : function(){
+			if (!clockRunning) {			
+            intervalId = setInterval(clock.count , 1000);
+            clockRunning = true;
+      		}		
+		},
 
-			timer.html(clock.time);
+		count : function() {			
 			clock.time--;
-			
-
-
+			console.log(clock.time);
+			timer.html(clock.time);
 			if(clock.time === -1)
-						{
-							clock.stop();
-							answerScreen();
-							unanswered++;
-						}
-			
-					
-					
-				
+			{
+				clock.stop();
+				answerScreen();
+				unanswered++;
+			}	
 			
 		},
 
 		stop : function(){
-
 			clearInterval(intervalId);
 			clockRunning = false;
-
 		}
 	}
-
-
 					$(".answer").remove();
 					$(".question").remove();
 					$(".timer").remove();
@@ -149,10 +130,9 @@ $(document).ready(function(){
 					 var timerLbl = $("<div>", {id: "timerLbl", class: "timer"});
 					 timerLbl.html("<h2>Time Remaining: </h2>");
 					 gameDiv.append(timerLbl);
-					
-
-						
-					 
+					 var timer = $("<div>", {id:"clock", class: "timer"});
+					 gameDiv.append(timer);
+	 
 					 var question = $("<div>", {id: "question1", class:"question"});
 					 question.html("<h2>" + questionArray[count].q +"</h2>");
 					 gameDiv.append(question);
@@ -172,9 +152,7 @@ $(document).ready(function(){
 
 					 $(".answer").on("click", function guess(){
 
-					 	
-
-				 		var userGuess = this.id;
+			 		var userGuess = this.id;
 
 							if (userGuess == questionArray[count].correct) {
 								
@@ -197,40 +175,45 @@ $(document).ready(function(){
 					 function answerScreen(){
 
 					 	clock.stop();
-					 	var secondTimerVal = setTimeout(newQuestion, 5000);
+					 	var secondTimerVal = setTimeout(newQuestion, 3000);					 	
+					 	$(".answer").remove();
+					 	$(".question").remove();
+					 	$(".timer").remove();				 	
+					 	answerDiv.html(questionArray[count].key);
+					 	gameDiv.append(answerDiv);
+					 	count++;
+					 	gameCheck();
 
-					 	
-					 	
-					 	
+					 }
+
+					 function gameCheck(){
+					  if(count == 5)
+						{
+							count = 0;
+						gameOverScreen();
+						
+						}
+					}
+
+					 function gameOverScreen(){
+
 					 	$(".answer").remove();
 					 	$(".question").remove();
 					 	$(".timer").remove();
+					 	clock.stop();
 
-					 	
-					 	answerDiv.html(questionArray[count].key);
-
-					 	gameDiv.append(answerDiv);
-					 	console.log("Wins: " + wins + " --- Losses: " + losses + " --- unanswered: " + unanswered);
-					 	
-					 	count++;
-					 	
+					 	answerDiv.html("Wins: " + wins + "<br>Losses: " + losses + "<br>Unanswered: " + unanswered);
+					 	var restartButton = $("<button>", {id: "restartButton"});
+					 	$("#restartButton").html("Restart");
+					 	answerDiv.append(restartButton);
 
 
 
 					 }
 
-			
-
+					
 				})
 	
-
-	 
-
-
-
-
-	
-
 
 })
 
